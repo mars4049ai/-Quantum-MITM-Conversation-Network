@@ -151,92 +151,222 @@ def insert_session_topic(
 
 
 # ---------------------------------------------------------------------------
-# AI message generation
+# Pre-built message pools — realistic conversations by topic
+# Each pool has 35-40 lines; sessions draw from them in order (with wrap).
 # ---------------------------------------------------------------------------
-_TOPIC_POOLS = [
-    "weekend plans", "work project", "food recommendations",
-    "travel ideas", "tech news", "sports update",
-    "movie suggestions", "health tips", "book recommendations",
-    "local events",
-]
-
-_TEMPLATE_LINES = [
-    "Hey, how are you doing?",
-    "I was thinking about that thing we discussed.",
-    "Did you see the news today?",
-    "Want to grab coffee sometime?",
-    "I finished that task we talked about.",
-    "Just checking in — all good on your end?",
-    "Let me know when you're free.",
-    "That sounds like a great idea!",
-    "I'll get back to you on that soon.",
-    "Thanks for the update.",
-    "Really? That's interesting.",
-    "Sounds good to me.",
-    "I had no idea — thanks for telling me.",
-    "We should definitely do that.",
-    "Keep me posted.",
-]
-
-
-def _template_messages(
-    user_a: dict, user_b: dict, num_messages: int
-) -> tuple[list[str], str]:
-    topic = random.choice(_TOPIC_POOLS)
-    msgs  = [random.choice(_TEMPLATE_LINES) for _ in range(num_messages)]
-    return msgs, topic
+_MESSAGE_POOLS: dict[str, list[str]] = {
+    "weekend plans": [
+        "Hey, any plans for the weekend?",
+        "Thinking of going hiking, you in?",
+        "Sounds great! Which trail are you thinking?",
+        "Maybe the riverside one, it's only an hour away.",
+        "Perfect. What time should we meet?",
+        "How about 9 am at the trailhead?",
+        "Works for me! Should I bring snacks?",
+        "Yes please, I'll handle the water bottles.",
+        "Cool. Is the weather going to be okay?",
+        "Checked the forecast — sunny all day.",
+        "Amazing. I'll wear proper shoes this time.",
+        "Ha, remember last time? Your sneakers were ruined.",
+        "Don't remind me. Lesson learned.",
+        "We should invite Sarah too, she loves hiking.",
+        "Good idea, I'll text her now.",
+        "Let me know what she says.",
+        "She's in! Says she'll bring sandwiches.",
+        "This is shaping up to be a great day.",
+        "Agreed. Should we carpool to save gas?",
+        "Sure, I can drive if you cover parking.",
+        "Deal. See you Saturday morning then!",
+        "Can't wait. It's been too long.",
+        "Totally. We need to do this more often.",
+        "Agreed — let's make it a monthly thing.",
+        "I'm holding you to that.",
+        "Same time next month, same trail?",
+        "Maybe try a different one for variety.",
+        "Good call. I'll research some options this week.",
+        "Send me the links when you find them.",
+        "Will do. Okay, see you Saturday!",
+        "See you then. Get some rest Friday night.",
+        "Always do. Good night!",
+        "Night!",
+        "Oh wait — do we need permits for that trail?",
+        "Let me check… no, it's free access.",
+        "Great, one less thing to worry about.",
+    ],
+    "work project": [
+        "Hey, did you finish the report for today's meeting?",
+        "Almost done, just need to add the charts.",
+        "Okay, the meeting is at 3 pm, you have time.",
+        "I know, I'm a bit stuck on the Q3 numbers.",
+        "Want me to send you the spreadsheet?",
+        "That would be super helpful, thanks.",
+        "Sent. Check the second tab, the data is there.",
+        "Got it, this makes much more sense now.",
+        "Also, the client wants an executive summary.",
+        "How long should it be? One page?",
+        "Two pages max. Focus on the key wins.",
+        "Got it. Should I mention the delays too?",
+        "Be honest but frame it positively.",
+        "Right, I'll say 'adjusted timeline' instead.",
+        "Exactly. Clients appreciate transparency.",
+        "Okay, draft should be ready in 30 minutes.",
+        "Perfect. I'll review it before you send.",
+        "Appreciate that. Fresh eyes always help.",
+        "No problem, we're a team.",
+        "By the way, the client rescheduled to 4 pm.",
+        "Oh good, that gives me more time.",
+        "Yeah, they had a conflict apparently.",
+        "Okay, sending you the draft now.",
+        "Reading it… this looks really solid.",
+        "You think so? I was worried about the intro.",
+        "The intro is great, very concise.",
+        "Made a few small edits, check your email.",
+        "Got the edits, they're much better.",
+        "Happy to help. You ready for the call?",
+        "As ready as I'll ever be.",
+        "You'll do great. You know this project inside out.",
+        "Thanks, that means a lot.",
+        "Let me know how it goes!",
+        "Will do. Fingers crossed.",
+        "Good luck! Talk after the meeting.",
+        "Sounds good. Chat later.",
+    ],
+    "food recommendations": [
+        "Have you tried that new Italian place on Fifth?",
+        "Not yet! Is it good?",
+        "Amazing. Best carbonara I've had in years.",
+        "Okay, now I have to go. What's it called?",
+        "Trattoria Venezia. Little place, very cozy.",
+        "Is it expensive?",
+        "Pretty reasonable actually. Like 20 bucks a plate.",
+        "That's not bad at all for Italian.",
+        "And the wine list is excellent too.",
+        "You had me at carbonara, honestly.",
+        "Ha! We should go together sometime.",
+        "Definitely. Do they take reservations?",
+        "Yes, you pretty much need one on weekends.",
+        "Good to know. What else did you try?",
+        "The tiramisu was out of this world.",
+        "Stop it, I'm getting hungry just reading this.",
+        "Sorry not sorry.",
+        "Are they open for lunch too?",
+        "Yes, weekdays only though.",
+        "Might try a lunch visit then.",
+        "Good idea, it's less crowded at lunch.",
+        "What about the pizza place on Oak Street?",
+        "Honestly? Overrated. Too expensive for what it is.",
+        "I thought so too but everyone raves about it.",
+        "People just like the hype sometimes.",
+        "Fair point. I'll skip it and try Venezia instead.",
+        "You won't regret it, promise.",
+        "Should I make a reservation for next Friday?",
+        "Yes! 7 pm works great.",
+        "Done. Looking forward to it already.",
+        "Same! It's going to be a great dinner.",
+        "Do they have vegetarian options?",
+        "Yes, their mushroom risotto is incredible.",
+        "Perfect, my sister can come then.",
+        "The more the merrier!",
+        "Okay, reserving for four people.",
+        "See you Friday!",
+    ],
+    "tech news": [
+        "Did you see the new chip announcement yesterday?",
+        "Yes! The performance numbers are insane.",
+        "40% faster than the previous generation.",
+        "And apparently more power efficient too.",
+        "That's the part that impressed me most.",
+        "Battery life on laptops is going to improve a lot.",
+        "Can't wait. My current laptop barely lasts 4 hours.",
+        "Same. I'm definitely upgrading this year.",
+        "When do they ship?",
+        "Q3 apparently, so a few months away.",
+        "Just in time for the holiday season.",
+        "Coincidence? I think not.",
+        "Ha, obviously timed for maximum sales.",
+        "Smart business move though.",
+        "True. What about the software side?",
+        "The new OS update looks promising.",
+        "I tried the beta, it's actually stable.",
+        "Really? Betas are usually a mess.",
+        "This one was surprisingly polished.",
+        "Maybe they finally learned their lesson.",
+        "Fingers crossed. What features stood out?",
+        "The new notification system is much cleaner.",
+        "The old one was cluttered, yeah.",
+        "And the battery management is smarter now.",
+        "That's exactly what power users needed.",
+        "Agreed. I'm cautiously optimistic.",
+        "Me too. Full release in September?",
+        "That's what they said at the conference.",
+        "I'll wait for the first patch before upgrading.",
+        "Always a safe strategy.",
+        "Learned that the hard way a few years back.",
+        "We all have that story.",
+        "What else caught your eye at the conference?",
+        "The AR glasses demo was wild.",
+        "I saw the clip — looked almost real.",
+        "Still a few years from consumer release though.",
+        "Yeah, but the direction is exciting.",
+    ],
+    "sports update": [
+        "Did you watch the game last night?",
+        "Of course! What a match.",
+        "That comeback in the second half was unreal.",
+        "I had basically given up by halftime.",
+        "Same. Down by two and then suddenly everything clicked.",
+        "The third goal was just pure brilliance.",
+        "I rewatched it three times this morning.",
+        "The skill level was just unbelievable.",
+        "This team has really come together this season.",
+        "New coach made a huge difference.",
+        "Definitely. The tactics are so much sharper.",
+        "And the team looks fitter too.",
+        "Pre-season training paid off clearly.",
+        "What did you think of the rookie?",
+        "He's going to be a star, no doubt.",
+        "That acceleration is something else.",
+        "And he's only 20 years old.",
+        "Scary to think how good he'll be in five years.",
+        "If he stays healthy and keeps his head right.",
+        "True, plenty of talented ones have flamed out.",
+        "The pressure at this level is intense.",
+        "He seems grounded though. Good family support.",
+        "That always helps.",
+        "Next match is Saturday, you watching?",
+        "Wouldn't miss it. Big rivalry game.",
+        "Should be a tough one. Away fixture too.",
+        "Away form has been solid this year though.",
+        "True, six wins from eight away games.",
+        "That stat is really impressive.",
+        "I think they can do it.",
+        "I'll come over and we can watch together.",
+        "Great idea. I'll get some snacks in.",
+        "I'll bring the drinks.",
+        "Perfect setup. Kick off at 5?",
+        "Yeah, 5 pm. Come a bit early.",
+        "Will do. Can't wait!",
+        "It's going to be a great afternoon.",
+    ],
+}
 
 
 def generate_session_messages(
     user_a: dict, user_b: dict, num_messages: int
 ) -> tuple[list[str], str]:
     """
-    Generate realistic chat messages via DeepSeek (falls back to templates).
+    Pick a random topic and return num_messages lines from its pre-built pool.
 
-    Requires DEEPSEEK_API_KEY environment variable.
-    DeepSeek API is OpenAI-compatible; uses openai SDK with custom base_url.
-
-    Returns:
-        (messages_list, topic_label)
-        messages_list — list of num_messages strings, alternating speakers
-        topic_label   — short phrase describing the conversation topic
+    Messages are drawn in order from the pool and wrap around if the session
+    is longer than the pool.  This produces coherent, realistic conversations
+    without any external API dependency.
     """
-    api_key = os.environ.get("DEEPSEEK_API_KEY", "")
-    if not api_key:
-        return _template_messages(user_a, user_b, num_messages)
-
-    try:
-        from openai import OpenAI
-        client = OpenAI(
-            api_key=api_key,
-            base_url="https://api.deepseek.com",
-        )
-
-        prompt = (
-            f'Generate a realistic chat conversation between {user_a["name"]} and '
-            f'{user_b["name"]}. Exactly {num_messages} short messages (10-50 words each), '
-            f'alternating turns starting with {user_a["name"]}.\n'
-            'Return ONLY a valid JSON object with two keys:\n'
-            '  "topic": a 2-4 word label (e.g. "weekend hiking plans")\n'
-            f'  "messages": array of exactly {num_messages} strings\n'
-            'Do NOT include any text outside the JSON.'
-        )
-        response = client.chat.completions.create(
-            model="deepseek-chat",
-            max_tokens=2048,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        data = json.loads(response.choices[0].message.content)
-        msgs = data["messages"][:num_messages]
-        # Pad with templates if the model returned fewer messages than requested
-        if len(msgs) < num_messages:
-            extra, _ = _template_messages(user_a, user_b, num_messages - len(msgs))
-            msgs.extend(extra)
-        return msgs, data.get("topic", "general chat")
-
-    except Exception as exc:
-        print(f"[AI generation failed: {exc}] — using templates")
-        return _template_messages(user_a, user_b, num_messages)
+    topic = random.choice(list(_MESSAGE_POOLS.keys()))
+    pool  = _MESSAGE_POOLS[topic]
+    # Draw in order starting from a random offset so sessions differ
+    start = random.randint(0, len(pool) - 1)
+    msgs  = [pool[(start + i) % len(pool)] for i in range(num_messages)]
+    return msgs, topic
 
 
 # ---------------------------------------------------------------------------
@@ -435,8 +565,7 @@ def main():
     print("Seeding hackers to Postgres...")
     seed_hackers_to_postgres(hackers)
 
-    ai_mode = "DeepSeek" if os.environ.get("DEEPSEEK_API_KEY") else "templates"
-    print(f"Message generation: {ai_mode}")
+    print(f"Message generation: pre-built pools ({len(_MESSAGE_POOLS)} topics)")
 
     print(f"Connecting to Kafka at {KAFKA_BOOTSTRAP}...")
     producer = create_producer()
