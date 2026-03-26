@@ -13,6 +13,12 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
     pip3 install --break-system-packages apache-flink==2.2.0
 
+# Quantum simulation libraries (used by Flink UDFs for BB84 quantum state computation)
+RUN pip3 install --break-system-packages \
+    qiskit==1.4.2 \
+    qiskit-aer==0.15.1 \
+    numpy>=1.26
+
 # Download connector JARs (4.x series for Flink 2.x)
 RUN cd /opt/flink/lib && \
     curl -LO https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/4.0.1-2.0/flink-sql-connector-kafka-4.0.1-2.0.jar && \
