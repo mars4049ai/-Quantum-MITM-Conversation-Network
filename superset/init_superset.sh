@@ -7,13 +7,13 @@ echo "=== Quantum MITM — Superset initialisation ==="
 # 1. Run DB migrations
 superset db upgrade
 
-# 2. Create admin user (idempotent — fails silently if already exists)
+# 2. Create admin user (matches the manual command shown in README)
 superset fab create-admin \
     --username admin \
-    --firstname Admin \
-    --lastname User \
-    --email admin@quantum-mitm.local \
-    --password admin 2>/dev/null || true
+    --firstname Superset \
+    --lastname Admin \
+    --email admin@admin.com \
+    --password postgres123 2>/dev/null || true
 
 # 3. Initialise roles and permissions
 superset init
@@ -37,7 +37,8 @@ done
 echo "Creating dashboards..."
 python /app/init_dashboards.py || echo "[WARN] Dashboard init encountered errors — continuing."
 
-echo "=== Superset ready at http://localhost:8088 (admin / admin) ==="
+echo "=== Superset ready at http://localhost:8088 ==="
+echo "    Login: admin / postgres123"
 
 # 7. Keep the container alive
 wait $SUPERSET_PID

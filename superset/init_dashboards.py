@@ -29,7 +29,7 @@ import requests
 
 BASE_URL  = "http://localhost:8088"
 ADMIN     = "admin"
-PASSWORD  = "admin"
+PASSWORD  = "postgres123"
 
 
 # ---------------------------------------------------------------------------
