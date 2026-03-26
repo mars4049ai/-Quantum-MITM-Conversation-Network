@@ -191,20 +191,26 @@ def generate_session_messages(
     user_a: dict, user_b: dict, num_messages: int
 ) -> tuple[list[str], str]:
     """
-    Generate realistic chat messages via Claude Haiku (falls back to templates).
+    Generate realistic chat messages via DeepSeek (falls back to templates).
+
+    Requires DEEPSEEK_API_KEY environment variable.
+    DeepSeek API is OpenAI-compatible; uses openai SDK with custom base_url.
 
     Returns:
         (messages_list, topic_label)
         messages_list — list of num_messages strings, alternating speakers
         topic_label   — short phrase describing the conversation topic
     """
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    api_key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not api_key:
         return _template_messages(user_a, user_b, num_messages)
 
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=api_key)
+        from openai import OpenAI
+        client = OpenAI(
+            api_key=api_key,
+            base_url="https://api.deepseek.com",
+        )
 
         prompt = (
             f'Generate a realistic chat conversation between {user_a["name"]} and '
@@ -215,13 +221,13 @@ def generate_session_messages(
             f'  "messages": array of exactly {num_messages} strings\n'
             'Do NOT include any text outside the JSON.'
         )
-        response = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        response = client.chat.completions.create(
+            model="deepseek-chat",
             max_tokens=2048,
             messages=[{"role": "user", "content": prompt}],
         )
-        data = json.loads(response.content[0].text)
-        msgs  = data["messages"][:num_messages]
+        data = json.loads(response.choices[0].message.content)
+        msgs = data["messages"][:num_messages]
         # Pad with templates if the model returned fewer messages than requested
         if len(msgs) < num_messages:
             extra, _ = _template_messages(user_a, user_b, num_messages - len(msgs))
@@ -429,7 +435,7 @@ def main():
     print("Seeding hackers to Postgres...")
     seed_hackers_to_postgres(hackers)
 
-    ai_mode = "Claude Haiku" if os.environ.get("ANTHROPIC_API_KEY") else "templates"
+    ai_mode = "DeepSeek" if os.environ.get("DEEPSEEK_API_KEY") else "templates"
     print(f"Message generation: {ai_mode}")
 
     print(f"Connecting to Kafka at {KAFKA_BOOTSTRAP}...")
