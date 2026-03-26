@@ -14,10 +14,11 @@ RUN JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
     pip3 install --break-system-packages apache-flink==2.2.0
 
 # Quantum simulation libraries (used by Flink UDFs for BB84 quantum state computation)
-RUN pip3 install --break-system-packages \
+# --no-cache-dir avoids hash-mismatch errors from stale pip cache in base image
+RUN pip3 install --break-system-packages --no-cache-dir \
     qiskit==1.4.2 \
     qiskit-aer==0.15.1 \
-    numpy>=1.26
+    "numpy==1.26.4"
 
 # Download connector JARs (4.x series for Flink 2.x)
 RUN cd /opt/flink/lib && \
