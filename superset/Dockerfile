@@ -3,6 +3,7 @@ FROM apache/superset:4.1.4
 USER root
 
 # psycopg2 for PostgreSQL connectivity
+RUN apt-get update -y && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir psycopg2-binary requests
 
 COPY init_superset.sh   /app/init_superset.sh
