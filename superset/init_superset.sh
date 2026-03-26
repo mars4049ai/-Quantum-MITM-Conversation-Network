@@ -20,7 +20,7 @@ superset init
 
 # 4. Start Superset server in the background
 echo "Starting Superset server on :8088 ..."
-superset run -p 8088 --with-threads &
+superset run -h 0.0.0.0 -p 8088 --with-threads &
 SUPERSET_PID=$!
 
 # 5. Wait until the health endpoint responds (max 120 s)
