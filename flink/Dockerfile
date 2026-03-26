@@ -4,7 +4,8 @@ USER root
 
 # Install Python and JDK headers (pyjnius needs JDK include/ on arm64)
 RUN apt-get update -y && \
-    apt-get install -y python3 python3-pip python3-dev default-jdk-headless && \
+    apt-get install -y python3 python3-pip python3-dev default-jdk-headless \
+        cmake g++ libopenblas-dev patchelf && \
     rm -rf /var/lib/apt/lists/*
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
@@ -16,8 +17,8 @@ RUN JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
 # Quantum simulation libraries (used by Flink UDFs for BB84 quantum state computation)
 # --no-cache-dir avoids hash-mismatch errors from stale pip cache in base image
 RUN pip3 install --break-system-packages --no-cache-dir \
-    qiskit==1.4.2 \
-    qiskit-aer==0.15.1 \
+    qiskit==1.3.2 \
+    qiskit-aer==0.14.2 \
     "numpy==1.26.4"
 
 # Download connector JARs (4.x series for Flink 2.x)
