@@ -1,4 +1,4 @@
-FROM flink:1.20-scala_2.12-java11
+FROM mirror.gcr.io/library/flink:1.20-scala_2.12-java11
 
 USER root
 

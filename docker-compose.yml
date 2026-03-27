@@ -1,6 +1,6 @@
 services:
   kafka:
-    image: apache/kafka:3.9.0
+    image: mirror.gcr.io/apache/kafka:3.9.0
     container_name: kafka
     hostname: kafka
     ports:
@@ -20,7 +20,7 @@ services:
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
   kafka-init:
-    image: apache/kafka:3.9.0
+    image: mirror.gcr.io/apache/kafka:3.9.0
     container_name: kafka-init
     depends_on:
       - kafka
@@ -42,7 +42,7 @@ services:
         echo 'Topics "messages" and "alerts" created.'
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: mirror.gcr.io/provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     ports:
       - "8080:8080"
@@ -53,7 +53,7 @@ services:
       - kafka
 
   postgres:
-    image: postgres:16-alpine
+    image: mirror.gcr.io/library/postgres:16-alpine
     container_name: postgres
     ports:
       - "5432:5432"
