@@ -1,4 +1,4 @@
-FROM apache/superset:4.1.4
+FROM mirror.gcr.io/apache/superset:4.1.4
 
 USER root
 
