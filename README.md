@@ -5,8 +5,9 @@ using BB84 quantum key distribution, Apache Kafka, Apache Flink, PostgreSQL, and
 Apache Superset.
 
 > **Note:** Message generation does **not** use AI. All chat messages are taken
-> from a pre-built list in `data/messages.json` (5 topics, ~38 messages each).
-> To customise the conversations, edit that file — no code changes needed.
+> from `data/messages.txt` — a plain-text file with one message per line,
+> organised under `[topic]` headers (5 topics, 36-40 messages each).
+> To customise, edit that file — no code changes needed.
 
 ---
 
@@ -68,7 +69,7 @@ np.random.seed(seed_int);  random.seed(seed_int)
   │       Python Generator       │
   │  • Qiskit BB84 (Qsim.py)     │
   │  • Messages from             │  ──── Kafka: messages ────▶  ┌──────────┐
-  │    data/messages.json        │                              │  Flink   │
+  │    data/messages.txt        │                              │  Flink   │
   │  • 500 users, 250 hackers    │  ◀─── Kafka: alerts ──────   │(PyFlink) │
   │  • Encrypts with BB84 key    │                              └────┬─────┘
   └──────────────────────────────┘                                  │ JDBC
@@ -172,7 +173,7 @@ Open http://localhost:8088 → log in → **Quantum MITM Dashboard**
 | **Most Attacked Clients** | Bar chart ranked by sessions attacked |
 | **Attack Timeline** | Line chart of alerts per minute |
 | **Big Numbers** | Total messages / attacks / detection rate % |
-| **Session Topics** | Topics from `data/messages.json` |
+| **Session Topics** | Topics from `data/messages.txt` |
 | **Hacker Decryption Attempts** | QBER, wrong key, garbage output |
 | **Full Tables** | Raw messages, alerts, hackers |
 
@@ -190,21 +191,59 @@ docker exec postgres psql -U hackathon -d streaming -c \
 
 ---
 
-## Superset Manual Setup (if auto-init fails)
+## Superset Registration
 
-If the Superset container starts but the dashboard is missing, run these
-commands manually (Linux/Mac use `sudo` if needed):
+Superset does **not** support web-based self-registration. The admin account
+must be created via the command line.
+
+### Quick-start scripts (run after `docker compose up`)
+
+**Windows (double-click or run from cmd):**
+
+```cmd
+:: Use default credentials (admin / postgres123)
+register_superset.bat
+
+:: Or specify your own:
+register_superset.bat myuser myuser@example.com mypassword
+```
+
+**Linux / Mac:**
 
 ```bash
-# Windows (PowerShell / cmd — no sudo)
+# Use default credentials (admin / postgres123)
+./register_superset.sh
+
+# Or specify your own:
+./register_superset.sh myuser myuser@example.com mypassword
+```
+
+Both scripts run the four required steps in order:
+
+```
+fab create-admin  →  db upgrade  →  load_examples  →  init
+```
+
+Default credentials (used when no arguments are given):
+
+| Field    | Default value      |
+|----------|--------------------|
+| Username | `admin`            |
+| Email    | `admin@admin.com`  |
+| Password | `postgres123`      |
+
+### Manual commands (if scripts are unavailable)
+
+```bash
+# Windows (cmd — ^ continues the line)
 docker exec -it superset superset fab create-admin ^
     --username admin ^
     --firstname Superset ^
     --lastname Admin ^
     --email admin@admin.com ^
     --password postgres123
-
 docker exec -it superset superset db upgrade
+docker exec -it superset superset load_examples
 docker exec -it superset superset init
 
 # Linux / Mac
@@ -215,6 +254,7 @@ docker exec -it superset superset fab create-admin \
     --email admin@admin.com \
     --password postgres123
 docker exec -it superset superset db upgrade
+docker exec -it superset superset load_examples
 docker exec -it superset superset init
 ```
 
@@ -228,9 +268,23 @@ docker exec -it superset python /app/init_dashboards.py
 
 ## Message Customisation
 
-Chat messages come from **`data/messages.json`** — no AI, no API key required.
+Chat messages come from **`data/messages.txt`** — no AI, no API key required.
 
-The file contains 5 topics, each with ~38 pre-written messages:
+The file uses a simple plain-text format: a `[topic name]` header line followed
+by one message per line. Blank lines are ignored.
+
+```
+[weekend plans]
+Hey, any plans for the weekend?
+Thinking of hitting the hiking trail on Saturday, you in?
+...
+
+[work project]
+Hey, can we sync up about the Q3 roadmap?
+...
+```
+
+The file contains 5 topics, each with 36-40 pre-written messages:
 
 | Topic | Description |
 |---|---|
@@ -240,7 +294,8 @@ The file contains 5 topics, each with ~38 pre-written messages:
 | `tech news` | Chips, OS updates, gadgets |
 | `sports update` | Match results, predictions |
 
-To add a topic or change messages, edit `data/messages.json` and restart the generator.
+To add a topic or change messages, edit `data/messages.txt` and restart the
+generator. No code changes needed.
 
 ---
 
@@ -299,7 +354,7 @@ rm -rf .venv
 |---|---|
 | `data/users.json` | 500 pre-generated users (fixed seed) |
 | `data/hackers.json` | 250 hackers with signature seeds |
-| `data/messages.json` | Pre-built chat messages by topic — **edit to customise** |
+| `data/messages.txt` | Pre-built chat messages by topic — **edit to customise** |
 
 To regenerate users/hackers:
 
