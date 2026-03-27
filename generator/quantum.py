@@ -2,7 +2,7 @@
 Quantum state functions for MITM detection — powered by real Qiskit BB84.
 
 This module replaces the SHA256 placeholder with a genuine BB84 quantum key
-distribution simulation built on the same Qiskit / qiskit-aer libraries used
+distribution simulation built on the same Qiskit libraries used
 by Qsim.py.  The logic mirrors Qsim.simulate_qkd_bb84() exactly; the key
 difference is deterministic seeding so that the generator and the Flink job
 independently reproduce the same quantum state for every (session_id, seq_num).
@@ -25,7 +25,7 @@ import random
 
 import numpy as np
 from qiskit import QuantumCircuit, transpile
-from qiskit_aer import Aer
+from qiskit.providers.basic_provider import BasicSimulator
 
 # ---------------------------------------------------------------------------
 # Number of BB84 qubits per quantum-state measurement.
@@ -33,14 +33,14 @@ from qiskit_aer import Aer
 # ---------------------------------------------------------------------------
 _BB84_BITS = 8
 
-# Module-level Aer backend — instantiated once per process (expensive).
+# Module-level simulator — instantiated once per process.
 _simulator = None
 
 
 def _get_simulator():
     global _simulator
     if _simulator is None:
-        _simulator = Aer.get_backend("qasm_simulator")
+        _simulator = BasicSimulator()
     return _simulator
 
 

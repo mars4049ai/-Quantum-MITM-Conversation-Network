@@ -1,6 +1,6 @@
 import numpy as np
 from qiskit import QuantumCircuit, transpile
-from qiskit_aer import Aer
+from qiskit.providers.basic_provider import BasicSimulator
 import random
 import hashlib
 import base64
@@ -13,7 +13,7 @@ from math import factorial
 import os
 class Qsim:
     def __init__(self, num_bits=32, use_quantum_memory=False, default_eve_active=False):
-        self.simulator = Aer.get_backend('qasm_simulator')
+        self.simulator = BasicSimulator()
         self.num_bits = num_bits
         self.use_quantum_memory = use_quantum_memory
         self.default_eve_active = default_eve_active

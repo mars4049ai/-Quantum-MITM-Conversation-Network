@@ -37,13 +37,13 @@ def compute_expected_state(session_id: str, sequence_num: int) -> float:
     import hashlib, math, random
     import numpy as np
     from qiskit import QuantumCircuit, transpile
-    from qiskit_aer import Aer
+    from qiskit.providers.basic_provider import BasicSimulator
 
     global _QASM_SIM_EXPECTED
     try:
         _QASM_SIM_EXPECTED
     except NameError:
-        _QASM_SIM_EXPECTED = Aer.get_backend("qasm_simulator")
+        _QASM_SIM_EXPECTED = BasicSimulator()
     sim = _QASM_SIM_EXPECTED
 
     _NUM_BITS = 8
@@ -108,13 +108,13 @@ def identify_hacker_udf(
     import hashlib, random
     import numpy as np
     from qiskit import QuantumCircuit, transpile
-    from qiskit_aer import Aer
+    from qiskit.providers.basic_provider import BasicSimulator
 
     global _QASM_SIM_IDENTIFY
     try:
         _QASM_SIM_IDENTIFY
     except NameError:
-        _QASM_SIM_IDENTIFY = Aer.get_backend("qasm_simulator")
+        _QASM_SIM_IDENTIFY = BasicSimulator()
     sim = _QASM_SIM_IDENTIFY
 
     _NUM_BITS  = 4       # fewer bits for performance in identification loop
@@ -257,12 +257,12 @@ def _bb84_hacker_run(hacker_id: int, session_id: str, sequence_num: int,
 @udf(result_type=DataTypes.DOUBLE())
 def hacker_qber_udf(session_id: str, sequence_num: int, hacker_id: int) -> float:
     """QBER (%) that this hacker produced during their BB84 interception."""
-    from qiskit_aer import Aer
+    from qiskit.providers.basic_provider import BasicSimulator
     global _QASM_SIM_HACKER_Q
     try:
         _QASM_SIM_HACKER_Q
     except NameError:
-        _QASM_SIM_HACKER_Q = Aer.get_backend("qasm_simulator")
+        _QASM_SIM_HACKER_Q = BasicSimulator()
     qber, _, _ = _bb84_hacker_run(hacker_id, session_id, sequence_num,
                                    _QASM_SIM_HACKER_Q)
     return round(qber, 4)
@@ -271,12 +271,12 @@ def hacker_qber_udf(session_id: str, sequence_num: int, hacker_id: int) -> float
 @udf(result_type=DataTypes.STRING())
 def hacker_key_udf(session_id: str, sequence_num: int, hacker_id: int) -> str:
     """The wrong key the hacker derived from their disturbed BB84 measurement."""
-    from qiskit_aer import Aer
+    from qiskit.providers.basic_provider import BasicSimulator
     global _QASM_SIM_HACKER_K
     try:
         _QASM_SIM_HACKER_K
     except NameError:
-        _QASM_SIM_HACKER_K = Aer.get_backend("qasm_simulator")
+        _QASM_SIM_HACKER_K = BasicSimulator()
     _, key_bob, _ = _bb84_hacker_run(hacker_id, session_id, sequence_num,
                                       _QASM_SIM_HACKER_K)
     return key_bob if key_bob else "0000"
@@ -296,12 +296,12 @@ def hacker_garbage_udf(
     Mirrors Qsim.decrypt_message() / classical_message_exchange() logic.
     """
     import hashlib, base64
-    from qiskit_aer import Aer
+    from qiskit.providers.basic_provider import BasicSimulator
     global _QASM_SIM_HACKER_G
     try:
         _QASM_SIM_HACKER_G
     except NameError:
-        _QASM_SIM_HACKER_G = Aer.get_backend("qasm_simulator")
+        _QASM_SIM_HACKER_G = BasicSimulator()
 
     _, key_bob, _ = _bb84_hacker_run(hacker_id, session_id, sequence_num,
                                       _QASM_SIM_HACKER_G)
