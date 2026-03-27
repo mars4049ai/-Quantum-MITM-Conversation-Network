@@ -12,15 +12,16 @@ Each chat session goes through two phases:
     A session whose channel could never be established is recorded as 'broken'.
 
   Phase 2 — Encrypted Message Exchange
-    Messages are taken from data/messages.json (pre-built realistic conversations
+    Messages are taken from data/messages.txt (pre-built realistic conversations
     grouped by topic).  Each message is encrypted with Qsim.encrypt_message().
     Per-message quantum state is computed via compute_quantum_state() (seeded
     BB84 without Eve).  If a mid-session hacker intercepts, hacker_perturbation()
     shifts the quantum state beyond the 15 % detection threshold.
 
 Message generation:
-    No AI required. Messages are loaded from data/messages.json — a predefined
-    list of realistic conversations for 5 topics.  To customise, edit that file.
+    No AI required. Messages are loaded from data/messages.txt — a plain-text
+    file with one message per line organised under [topic] headers (5 topics,
+    36-40 messages each).  To customise, edit that file.
 
 Usage:
     python generator.py [--sessions N] [--mitm-pct P] [--delay MIN MAX]
@@ -152,14 +153,26 @@ def insert_session_topic(
 
 
 # ---------------------------------------------------------------------------
-# Pre-built message pools — loaded from data/messages.json
-# Each topic has 38-40 lines; sessions draw in order from a random offset.
-# Edit data/messages.json to add topics or change message text.
+# Pre-built message pools — loaded from data/messages.txt
+# Format: [topic name] header lines followed by one message per line.
+# Each topic has 36-40 lines; sessions draw in order from a random offset.
+# Edit data/messages.txt to add topics or change message text.
 # ---------------------------------------------------------------------------
 def _load_message_pools() -> dict[str, list[str]]:
-    path = os.path.join(DATA_DIR, "messages.json")
-    with open(path) as f:
-        return json.load(f)
+    path = os.path.join(DATA_DIR, "messages.txt")
+    pools: dict[str, list[str]] = {}
+    current_topic: str | None = None
+    with open(path, encoding="utf-8") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            if not line:
+                continue
+            if line.startswith("[") and line.endswith("]"):
+                current_topic = line[1:-1]
+                pools[current_topic] = []
+            elif current_topic is not None:
+                pools[current_topic].append(line)
+    return pools
 
 
 _MESSAGE_POOLS: dict[str, list[str]] = _load_message_pools()

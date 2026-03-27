@@ -1,0 +1,184 @@
+[weekend plans]
+Hey, any plans for the weekend?
+Thinking of hitting the hiking trail on Saturday, you in?
+I was actually going to ask you the same thing!
+Let's do it — what time works for you?
+Early morning is best, maybe 8 AM?
+Perfect, I'll pack some snacks.
+Should we invite anyone else or keep it just us?
+Let's keep it small, maybe four people max.
+Good call. I'll ask Maya and Tom.
+Did you check the weather forecast?
+Looks like it'll be partly cloudy, perfect hiking weather.
+I need to buy new hiking boots, mine are falling apart.
+REI has a sale this weekend, great timing.
+I'll swing by there Friday evening.
+What trail are we doing?
+I was thinking the ridge loop, about 8 miles round trip.
+That's a solid workout. Last time I was wrecked the next day.
+Same, but it's worth it for those views.
+I'll bring the portable speaker for the drive.
+Don't forget sunscreen, we got burned last time.
+True, lesson learned. I'll bring extra.
+Should we carpool? Saves gas and easier parking.
+Good idea, I can drive if you navigate.
+Deal. I'll download the offline map just in case.
+Any dietary restrictions for the picnic?
+Jake went vegan recently so let's keep that in mind.
+Got it, I'll make sure everything's vegan-friendly.
+What about drinks? Last time we ran out of water fast.
+I'll bring a 3-litre filter bottle, problem solved.
+Smart. See you Saturday then?
+Yeah, can't wait. It's been too long since we did something like this.
+Same, the week has been crazy stressful.
+The fresh air will do us good.
+Agreed. Text me when you're leaving.
+Will do. Get some rest Friday night!
+You too. This is going to be great.
+
+[work project]
+Hey, can we sync up about the Q3 roadmap?
+Sure, give me 10 minutes to finish this PR review.
+No rush, ping me when you're free.
+Okay, I'm free now. What's the status?
+The API integration is behind by two days.
+What's blocking it?
+The third-party auth docs are incomplete and their support is slow.
+That's frustrating. Do we have a workaround?
+We can mock the endpoints for now and swap in the real ones later.
+That works for the demo next week. Do it.
+Will do. Also the front-end team is waiting on the final schema.
+I'll send it to them today.
+Great. The dashboard mockups look really solid by the way.
+Thanks, Sarah did most of the heavy lifting on those.
+Make sure to credit her in the standup.
+Absolutely. One more thing — the staging environment is down.
+DevOps knows about it, they're on it.
+ETA for the fix?
+They said within the hour.
+Fine. I'll work locally until it's back.
+Don't forget to commit your local changes before switching branches.
+Good reminder. Done.
+Did you see the feedback from the client review yesterday?
+Yeah, they want the export feature bumped up in priority.
+That means pushing the notification system back a sprint.
+Correct. I've updated the Jira board already.
+Nice, I'll re-estimate the export tickets this afternoon.
+Sounds good. Anything else blocking you?
+Just the auth issue, everything else is on track.
+Keep me posted. Let's do a quick call tomorrow morning.
+Works for me. 9 AM?
+Perfect.
+I'll send the invite.
+Thanks. Talk tomorrow.
+Have a good one!
+
+[food recommendations]
+Have you tried that new ramen place on 5th?
+Not yet! Is it good?
+It's incredible. The tonkotsu broth is insane.
+I've been craving ramen for weeks. What's it called?
+Kuro Ramen. It's a bit pricey but totally worth it.
+I'll add it to my list. How long is the wait?
+Went on a Tuesday evening and it was maybe 20 minutes.
+That's manageable. Do they take reservations?
+No reservations but they have a QR waitlist you join from outside.
+Smart setup. Any other must-orders?
+The gyoza are amazing and the spicy miso is a sleeper hit.
+Sold. Want to go together sometime this week?
+Thursday works for me.
+Let's do Thursday then. 7 PM?
+Perfect. Oh and avoid the karaage, it was a bit oily.
+Noted. Speaking of food, did you try making that curry you mentioned?
+I did! Turned out better than expected.
+What recipe did you use?
+Kenji's chicken tikka masala from Serious Eats.
+That's a great recipe. Did you follow it exactly?
+Pretty much, but I added extra garam masala.
+Nice touch. I made his shakshuka last week.
+His recipes are so reliable. Honestly I cook from that site weekly.
+Same. I want to try his smash burger next.
+Oh that one is dangerous. Made it once and now it's on rotation.
+Ha, I can imagine. What sides do you do with it?
+Oven fries with smoked paprika. Simple but perfect.
+I'll try that combo. Want to do a cook-off sometime?
+That sounds really fun. You bring the burgers, I'll do the fries.
+Deal. Saturday after the hike?
+Yes! Food after a long hike hits differently.
+Agreed. I'm already excited about this Saturday.
+Let's not forget dessert this time.
+Good call — I'll grab ice cream on the way.
+
+[tech news]
+Did you read that article about the new open source LLM?
+Which one? There have been like three releases this week.
+The one from the research group in Europe, multilingual focus.
+Oh yeah, the benchmark numbers looked impressive.
+Apparently it runs fine on consumer hardware with 4-bit quantisation.
+That changes everything for local AI. I tried it this morning.
+How was it?
+Surprisingly good for code tasks. Not perfect but very usable.
+What about reasoning? That's always been the weak spot.
+Still weaker than the frontier models but closing the gap fast.
+It's wild how quickly this space is moving.
+I told my manager we should experiment with local LLMs for internal tooling.
+What was the reaction?
+Cautious interest. Security team loves the idea of no data leaving the org.
+That's always the selling point. What's the use case?
+Summarising meeting transcripts and drafting internal docs.
+Low risk, high value. Good starting point.
+Exactly. Plus it trains the team on how to work with AI tools.
+Have you seen the new diffusion model for video?
+Just the demos. The temporal consistency is impressive.
+The latency is still an issue for real-time use though.
+Give it six months.
+Ha, that phrase applies to everything in AI right now.
+Honestly fair. Did you update your dev environment to Python 3.13?
+Not yet, waiting for the key packages to catch up.
+NumPy and Pandas are good, but some ML libs are lagging.
+I'll wait another month then. No rush.
+Wise. What IDE are you using these days?
+Still on VS Code but I'm eyeing Zed.
+I tried Zed last week. Fast but the extension ecosystem isn't there yet.
+I'll hold off then. VS Code has spoiled me with extensions.
+Same. Okay I should get back to actual work.
+Ha, same. This was a good break though.
+Let's catch up properly later this week.
+
+[sports update]
+Did you catch the game last night?
+Of course! That comeback in the fourth quarter was unreal.
+I was convinced it was over at halftime.
+Me too. Down by 14 and then just exploded offensively.
+The point guard was on fire. 34 points off the bench!
+Career high, I think. He looked completely locked in.
+Their defensive adjustments in the third were key.
+Agreed, they completely took away the easy looks inside.
+The coach deserves credit for those halftime changes.
+Absolutely. Last month people were calling for his job.
+Sports fans are so impatient.
+Ha, tell me about it. What did you think of the trade rumors?
+I saw that. Moving their starting centre for draft picks seems risky.
+Short term pain for long term gain, maybe.
+Depends on how the picks turn out. High risk move.
+They clearly think they're in a rebuild phase now.
+After last season's playoff exit I get it.
+True. Sometimes you need to blow it up.
+On a different note, did you see the cycling race this weekend?
+Yeah! That mountain stage was brutal.
+The climber from Colombia absolutely destroyed the field.
+He looked like he was going uphill on flat ground.
+His VO2 max must be insane.
+I read he trains at 4000m altitude. Makes sense.
+I tried cycling more seriously last year. Destroyed my knees.
+You need proper bike fit. Most people skip that.
+I found that out the hard way. Good physio though.
+Are you still running?
+Yep, signed up for a half marathon in October.
+Nice! What's your target time?
+Under two hours would be a PB for me.
+You can definitely do it. What's your training plan?
+Running four days a week and one long run on Sundays.
+Solid plan. Make sure to taper the week before.
+Good reminder. I always overtrain right before a race.
+Classic mistake. Trust the training.
